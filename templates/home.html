@@ -1,0 +1,278 @@
+ {% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+
+  <!-- Welcome Area Start  -->
+  <section class="welcome-area">
+    <!-- Welcome Slides -->
+    <div class="welcome-slides owl-carousel">
+      <!--  Welcome Slide -->
+      <div class="welcome-welcome-slide bg-img .bg-info.bg-gradient jarallax"  style="background-image: url('{% static 'img/bg-img/1.jpg' %}');">
+        <div class="container h-100">
+          <div class="row h-100 align-items-center">
+            <div class="col-12">
+              <!-- Welcome Text -->
+              <div class="welcome-text text-center">
+                <h2 data-animation="" data-delay="100ms">Personally, I have always felt that the best doctor in the world is the Veterinarian</h2>
+
+
+                <div class="welcome-btn-group">
+
+                    <form id="job-main-form" method="get" action="{% url 'appointment:search' %}" class="search-vet-form">
+                    <div class="row mb-5">
+
+
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                            <input type="text" id="location" name="location"
+                                   class="form-control form-control-lg" placeholder="Location? ?  Ex : Dasmarinas City Cavite">
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
+
+
+                            <select id="department" name="department" class="form-control">
+                                <option style="display: none;" >Select Your Service</option>
+                                <option>Fitness Specialist</option>
+                                <option>Hygiene Specialist</option>
+                                <option>Pychiatric Specialist</option>
+                                <option>Mobility Specialist</option>
+                                <option>Surgery Specialist</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-12 col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block text-black btn-search"><span
+                                    class="icon-search icon mr-2"></span>Search Veterinarian
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+ <section class="vet-area section-padding-35-0">
+
+        <div class="container">
+
+
+
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="section-heading text-center">
+                         </br>
+
+                        <h3 class="lead">Available Veterinarian </h3>
+                        <div class="line"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+
+                {% for apt in home %}
+                    <!-- Single Docvet Area -->
+                    <div class="col-12 col-sm-6 col-md-4">
+                        <div class="single-vet-area mb-100">
+                            <img style="height: 500px; width: 600px" src="{{ apt.image.url }}" alt="">
+                            <!-- Docvet Content -->
+                            <div class="vet-content">
+                                <!-- Social Info -->
+                                <div class="vet-social-info">
+
+                                </div>
+                                <!-- docvet Info -->
+                                <div class="vet-info bg-gradient-overlay">
+                                    {% if request.user.is_authenticated and request.user.role == 'patient' %}
+                                        <h5>{{ apt.full_name }}</h5>
+                                        <p>{{ apt.department }} Expert</p>
+                                        <p>{{ apt.qualification_name }}, {{ apt.institute_name }}</p>
+                                        <p>Available {{ apt.start_time }} to {{ apt.end_time }}
+                                            in {{ apt.clinic_name }}</p>
+                                        <p>
+                                            AT {{ apt.location }} <i class="fa fa-th"></i>
+                                            <a href="{% url 'appointment:take-appointment' apt.id %}"> Take
+                                                Appointment</a>
+
+                                        </p>
+
+                                    {% elif request.user.is_authenticated and request.user.role == 'viewer' %}
+                                        <h5>{{ apt.full_name }}</h5>
+                                        <p>{{ apt.department }} Expert</p>
+                                        <p>{{ apt.qualification_name }}, {{ apt.institute_name }}</p>
+                                        <p>Available {{ apt.start_time }} to {{ apt.end_time }}
+                                            in {{ apt.clinic_name }}</p>
+                                        <p>
+                                            AT {{ apt.location }} <i class="fa fa-th"></i>
+                                           <!--  <a href="{% url 'appointment:take-appointment' apt.id %}"> Take
+                                                Appointment</a> -->
+
+                                        </p>
+
+
+
+                                    {% elif request.user.is_authenticated and request.user.role == 'vet'   %}
+
+                                        <h5>{{ apt.full_name }}</h5>
+                                        <p>{{ apt.department }} Expert</p>
+                                        <p>{{ apt.qualification_name }}, {{ apt.institute_name }}</p>
+                                        <p>Available {{ apt.start_time }} to {{ apt.end_time }}
+                                            in {{ apt.clinic_name }}</p>
+                                        <p>AT {{ apt.location }}</p>
+
+                                        {% else %}
+
+                                         <h5>{{ apt.full_name }}</h5>
+                                        <p>{{ apt.department }} Expert</p>
+                                        <p>{{ apt.qualification_name }}, {{ apt.institute_name }}</p>
+                                        <p>Available {{ apt.start_time }} to {{ apt.end_time }}
+                                            in {{ apt.clinic_name }}</p>
+                                        <p>
+                                            AT {{ apt.location }} </p>
+
+
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+                <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; First</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+    </span>
+                </div>
+
+
+            </div>
+
+        </div>
+    </section>
+
+
+
+
+
+  
+
+<!-- Cards -->
+<div class = "ourservice">
+   <h1>PAWS</h1>
+   <h2>Serve you</h2>
+   <p>We are a community-based veterinary practice that has been providing pet care for many years. Everything from routine care through surgery, fitness care, hygiene and checkups, and advanced diagnostics can be found here. Every pets that walks through our doors will receive lovable care,positive treatment as well as great customer service for your family.</p>
+   </div>
+
+
+<div class="servicepicture">
+
+ <!--cards -->
+
+<div class="service_card">
+
+<div class="image">
+   <img src='{% static 'img/bg-img/3.jpg' %}'>
+</div>
+<div class="title">
+ <h1>Supplementary</h1>
+</div>
+<div class="des">
+ <p>Indoor pets for our family. In addition to flea treatments and immunizations, your pet needs to see the veterinarian on a regular basis to stay healthy.</p>
+
+</div>
+</div>
+<!--cards -->
+
+
+<div class="service_card">
+
+<div class="image">
+   <img src='{% static 'img/bg-img/4.jpg' %}'>
+</div>
+<div class="title">
+ <h1>Surgery</h1>
+</div>
+<div class="des">
+ <p>Animals live longer, and by giving them a better,heat cycles and behavioral changes, resulting in a happier and well-adjusted care.</p>
+
+</div>
+</div>
+<!--cards -->
+
+
+<div class="service_card">
+
+<div class="image">
+   <img src='{% static 'img/bg-img/1.jpg' %}'>
+</div>
+<div class="title">
+ <h1> Trains pets</h1>
+</div>
+<div class="des">
+ <p>Proper training is still the best way to have a well-mannered pet. We gladly to help your pets becamed physically and mentally active.</p>
+
+</div>
+</div>
+<!--cards -->
+
+
+<div class="service_card">
+
+<div class="image">
+   <img src='{% static 'img/bg-img/5.jpg' %}'>
+</div>
+<div class="title">
+ <h1>Pet Hygiene</h1>
+</div>
+<div class="des">
+ <p>Practicing good pet hygiene can help prevent the spread of germs between pets and people. Their best interest to maintain a healthy.</p>
+
+</div>
+</div>
+<!--cards -->
+
+</div>
+
+<!-- cards end -->
+
+
+  
+
+
+
+   
+
+{% endblock %}

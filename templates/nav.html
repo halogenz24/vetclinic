@@ -1,0 +1,217 @@
+{% load static %}
+<!-- Preloader -->
+<!-- Preloader -->
+<style>
+.ourservice{
+    margin-top: 50px;
+    text-align: center;
+
+
+  }
+  .ourservice h1{
+    margin-top: 1px;
+    padding-left: 250px;
+    width: 80%;
+    font-size: 30px;
+
+  }
+  .ourservice p{
+    
+    margin-top: 50px;
+    padding-left: 250px;
+    width: 80%;
+
+  }
+  .ourservice h2{
+    margin-top: 1px;
+    padding-left: 250px;
+    width: 80%;
+    font-size: 50px;
+
+  }
+
+.servicepicture{
+
+ margin: 2%;
+}
+
+.service_card{
+     width: 20%;
+     display: inline-block;
+     box-shadow: 2px 2px 20px gray;
+     border-radius: 5px; 
+     margin: 2%;
+    }
+
+.image img{
+  width: 100%;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  
+
+ 
+ }
+
+.title{
+ 
+  text-align: center;
+  padding: 10px;
+  
+ }
+
+h1{
+  font-size: 20px;
+ }
+
+.des{
+  padding: 3px;
+  text-align: center;
+ 
+  
+}
+button{
+  margin-top: 40px;
+  margin-bottom: 10px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding:10px;
+}
+button:hover{
+  background-color: black;
+  color: white;
+  transition: .5s;
+  cursor: pointer;
+}
+</style>
+
+<div id="preloader">
+    <div class="preload-content">
+        <div id="dento-load"></div>
+    </div>
+</div>
+
+
+    <!-- Main Header Start -->
+    <div class="main-header-area">
+        <div class="classy-nav-container breakpoint-off">
+            <div class="container">
+                <!-- Classy Menu -->
+                <nav class="classy-navbar  justify-content-center" id="dentoNav">
+
+                    <!-- Logo -->
+                    <a class="nav-brand" href="{% url 'appointment:home' %}"><img src="{% static 'img/logo3.png' %}" alt="">
+                    </a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+
+                        <!-- Close Button -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Nav Start -->
+                        <div class="classynav">
+
+
+                            <ul id="nav">
+
+                                <li><a href="{% url 'appointment:home' %}">Home</a></li>
+
+
+                                <li><a href="{% url 'appointment:service' %}">Services</a></li>
+                                 <li><a href="{% url 'appointment:view-list' %}">Views</a></li>
+
+
+                                {% if request.user.is_authenticated and request.user.role == 'vet' %}
+
+                                    <li>
+                                        <a href="">
+                                            <span class="glyphicon glyphicon-user">
+                                                    {{ request.user.first_name }}
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown">
+                                            <li><a href="{% url 'accounts:vet-profile-update'  %}"> EDIT PROFILE</a></li>
+                                            <li><a href="{% url 'appointment:patient-list' %}"> PATIENTS</a></li>
+                                            <li><a href="{% url 'appointment:vet-appointment' %}">  APPOINTMENTS</a></li>
+                                            <li><a href="{% url 'appointment:vet-appointment-create' %}"> CREATE APPOINTMENT</a></li>
+                                            <li><a href="{% url 'accounts:logout' %}"> LOGOUT</a></li>
+
+                                        </ul>
+                                    </li>
+
+
+                             {% elif request.user.is_authenticated and request.user.role == 'patient' %}
+                                    <li>
+                                        <a href="">
+                                            <span class="glyphicon glyphicon-user">
+                                                    {{ request.user.first_name }}
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown">
+                                            <!-- <li><a href="{% url 'appointment:view-list-user' %}">VIEWS</a></li> -->
+                                            <!-- <li><a href=" "> VIEWS</a></li> -->
+                                            <li><a href="{% url 'accounts:patient-profile-update'  %}"> EDIT PROFILE</a></li>
+                                            <li><a href="{% url 'accounts:logout' %}"> LOGOUT</a></li>
+
+                                        </ul>
+                                    </li>
+
+                            {% elif request.user.is_authenticated and request.user.role == 'viewer' %}
+                                    <li>
+                                        <a href="">
+                                            <span class="glyphicon glyphicon-user">
+                                                    {{ request.user.first_name }}
+                                            </span>
+                                        </a>
+                                        <ul class="dropdown">
+                                            <!-- <li><a href="{% url 'appointment:view-list-user' %}">VIEWS</a></li> -->
+                                            <!-- <li><a href=" "> VIEWS</a></li> -->
+                                            <li><a href="{% url 'accounts:logout' %}"> LOGOUT</a></li>
+
+                                        </ul>
+                                    </li>
+
+
+
+
+
+                              {% else %}
+                                    <li><a href="#">Register</a>
+                                        <ul class="dropdown">
+                                            <li><a href="{% url 'accounts:vet-register' %}"> VETERINARIAN</a></li>
+                                            <li><a href="{% url 'accounts:patient-register' %}"> PATIENT</a></li>
+                                            <li><a href="{% url 'accounts:viewer-register' %}"> VIEWER</a></li>
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a href="{% url 'accounts:login' %}">
+                                            <span class="glyphicon glyphicon-user"> login</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+
+
+
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    
+
+</div>
+</header>
